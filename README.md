@@ -165,4 +165,4 @@ curl "http://localhost:3000/api/aqi/forecast?city=Mumbai"
 
 ## License
 
-No license is currently specified. Add a `LICENSE` file before distributing or reusing this project outside the repository’s intended scope.
+No license.
