@@ -114,9 +114,9 @@ export const ForecastPanel: React.FC<ForecastPanelProps> = ({
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-            <XAxis dataKey="hourLabel" stroke="#94a3b8" fontSize={10} tickLine={false} interval={5} />
+            <XAxis dataKey="hourLabel" stroke="#94a3b8" fontSize={10} tickLine={false} interval={5} tickFormatter={(label) => label.replace(/^[A-Z][a-z]{2} \d+ /, '')} />
             <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} domain={[0, 'dataMax + 50']} />
-            <Tooltip
+            <Tooltip cursor={{ stroke: '#e2e8f0', strokeWidth: 1, strokeDasharray: '4 4' }} allowEscapeViewBox={{ x: false, y: true }}
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   const data: ForecastPoint = payload[0].payload;
@@ -147,22 +147,22 @@ export const ForecastPanel: React.FC<ForecastPanelProps> = ({
 
             {selectedView === 'AQI' && (
               <>
-                <Area type="monotone" dataKey="confidenceUpper" stroke="none" fill="url(#confidenceGradient)" name="Upper Confidence" />
-                <Area type="monotone" dataKey="aqi" stroke="#f97316" strokeWidth={2.5} fill="url(#aqiGradient)" name="AQI Prediction" />
+                <Area isAnimationActive={false} type="monotone" dataKey="confidenceUpper" stroke="none" fill="url(#confidenceGradient)" name="Upper Confidence" />
+                <Area isAnimationActive={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff', fill: '#f97316' }} type="monotone" dataKey="aqi" stroke="#f97316" strokeWidth={2.5} fill="url(#aqiGradient)" name="AQI Prediction" />
               </>
             )}
 
             {selectedView === 'PM2.5' && (
               <>
-                <Area type="monotone" dataKey="pm25" stroke="#eab308" strokeWidth={2} fillOpacity={0.2} fill="#eab308" name="PM2.5 (ug/m3)" />
-                <Area type="monotone" dataKey="no2" stroke="#06b6d4" strokeWidth={2} fillOpacity={0.2} fill="#06b6d4" name="NO2 (ug/m3)" />
+                <Area isAnimationActive={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }} type="monotone" dataKey="pm25" stroke="#eab308" strokeWidth={2} fillOpacity={0.2} fill="#eab308" name="PM2.5 (ug/m3)" />
+                <Area isAnimationActive={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }} type="monotone" dataKey="no2" stroke="#06b6d4" strokeWidth={2} fillOpacity={0.2} fill="#06b6d4" name="NO2 (ug/m3)" />
               </>
             )}
 
             {selectedView === 'WEATHER' && (
               <>
-                <Area type="monotone" dataKey="windSpeed" stroke="#38bdf8" strokeWidth={2} fillOpacity={0.1} fill="#38bdf8" name="Wind Speed (km/h)" />
-                <Area type="monotone" dataKey="humidity" stroke="#a855f7" strokeWidth={1.5} fill="none" name="Humidity (%)" />
+                <Area isAnimationActive={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }} type="monotone" dataKey="windSpeed" stroke="#38bdf8" strokeWidth={2} fillOpacity={0.1} fill="#38bdf8" name="Wind Speed (km/h)" />
+                <Area isAnimationActive={false} activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }} type="monotone" dataKey="humidity" stroke="#a855f7" strokeWidth={1.5} fill="none" name="Humidity (%)" />
               </>
             )}
           </AreaChart>

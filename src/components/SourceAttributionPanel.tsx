@@ -85,7 +85,7 @@ export const SourceAttributionPanel: React.FC<SourceAttributionPanelProps> = ({
                   <Cell key={`cell-${index}`} fill={entry.color} stroke="#0f172a" strokeWidth={2} />
                 ))}
               </Pie>
-              <Tooltip
+              <Tooltip cursor={false}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0];

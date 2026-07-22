@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { User, UserRole, CitySummary } from '../types';
-import { Shield, Users, Cpu, RefreshCw, BarChart2, MapPin, ChevronDown } from 'lucide-react';
+import { Shield, Users, Cpu, RefreshCw, BarChart2, MapPin, ChevronDown, Wind } from 'lucide-react';
 
 interface HeaderProps {
   currentUser: User;
@@ -39,8 +39,9 @@ export const Header: React.FC<HeaderProps> = ({
         
         {/* Brand & Live Indicator */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold tracking-wider shadow-inner">
-            <span className="text-xl">IQ</span>
+          <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/35 bg-gradient-to-br from-cyan-400/20 via-emerald-400/10 to-indigo-500/20 shadow-[inset_0_1px_0_rgb(255_255_255/0.16),0_8px_20px_rgb(6_182_212/0.15)]">
+            <span className="absolute h-7 w-7 rounded-full border border-cyan-200/20" />
+            <Wind className="relative h-5 w-5 text-cyan-200" strokeWidth={2.3} />
           </div>
           <div>
             <div className="flex items-center space-x-2">
@@ -50,10 +51,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <div className="flex items-center space-x-2 text-xs text-slate-400">
-              <span className="relative flex h-2 w-2">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isDataStale ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-                <span className={`relative inline-flex rounded-full h-2 w-2 ${isDataStale ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
-              </span>
               <span>
                 {isDataStale ? 'Cached reference data' : 'CPCB CAAQMS Feed'} • Updated {lastRefreshed}
               </span>

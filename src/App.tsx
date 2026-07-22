@@ -258,8 +258,8 @@ export default function App() {
       />
 
       {/* Primary Navigation Tabs */}
-      <nav className="glass-nav sticky top-16 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap gap-1.5 py-2.5">
+      <nav className="glass-nav nav-scroll sticky top-20 z-30 mx-4 mt-4 w-auto overflow-x-auto rounded-2xl border sm:mx-6 lg:mx-auto lg:max-w-[1216px]">
+        <div className="mx-auto flex min-w-max max-w-7xl gap-1.5 px-4 py-2.5 sm:px-6">
           
           <button
             onClick={() => setActiveTab('MAP')}
@@ -362,20 +362,6 @@ export default function App() {
 
       {/* Main Content Workspace Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <div className="region-context flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
-          <div className="flex items-center gap-2 text-slate-300"><MapPin className="h-4 w-4 text-cyan-300" /><span>Viewing live intelligence for <strong className="text-white">{activeCityObj.name}</strong>, {activeCityObj.state}</span></div>
-          <div className="flex flex-wrap items-center gap-2">
-            <label className="text-xs font-medium text-slate-400" htmlFor="dashboard-state">State</label>
-            <select id="dashboard-state" value={selectedState} onChange={(event) => handleSelectState(event.target.value)} className="rounded-lg border border-slate-600/70 bg-slate-950/50 px-2 py-1 text-xs font-semibold text-slate-100">
-              {[...new Set(cities.map((city) => city.state))].map((state) => <option key={state} value={state}>{state}</option>)}
-            </select>
-            <label className="text-xs font-medium text-slate-400" htmlFor="dashboard-city">City</label>
-            <select id="dashboard-city" value={selectedCity} onChange={(event) => handleSelectCity(event.target.value)} className="rounded-lg border border-cyan-400/30 bg-slate-950/50 px-2 py-1 text-xs font-semibold text-cyan-100">
-              {cities.filter((city) => city.state === selectedState).map((city) => <option key={city.name} value={city.name}>{city.name}</option>)}
-            </select>
-            <span className="rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">AQI {activeCityObj.avgAqi} · {activeCityObj.category}</span>
-          </div>
-        </div>
         
         {/* Active Tab Content Switching */}
         {activeTab === 'MAP' && (
@@ -471,16 +457,6 @@ export default function App() {
         )}
 
       </main>
-
-      {/* Footer */}
-      <footer className="glass-footer text-slate-400 py-6 text-xs text-center space-y-2">
-        <p className="font-semibold text-slate-300">
-          AirIQ — Urban Air Quality Intelligence Platform • Team Project 2026
-        </p>
-        <p className="text-[11px] text-slate-500 max-w-3xl mx-auto">
-          Powered by CPCB CAAQMS Station Feeds, Physics-Informed Atmospheric Forecast Models, Simulated Copernicus Sentinel-5P Satellite Overlays, and the AirIQ operational engine.
-        </p>
-      </footer>
 
       {/* Telemetry Modal */}
       {showMetricsModal && (

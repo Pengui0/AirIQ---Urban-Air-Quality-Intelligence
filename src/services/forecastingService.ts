@@ -43,7 +43,7 @@ export function generate72HourForecast(city: string, baseAqi: number): ForecastP
 
     points.push({
       timestamp: time.toISOString(),
-      hourLabel: `${timeStr}`,
+      hourLabel: `${dateStr} ${timeStr}`,
       dateLabel: `${dateStr}`,
       aqi: forecastedAqi,
       pm25,

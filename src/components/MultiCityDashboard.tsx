@@ -120,7 +120,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
               <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} />
               <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
-              <Tooltip
+              <Tooltip cursor={{ fill: 'rgb(148 163 184 / 0.12)' }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
@@ -136,7 +136,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
                   return null;
                 }}
               />
-              <Bar dataKey="aqi" radius={[6, 6, 0, 0]}>
+              <Bar isAnimationActive={false} dataKey="aqi" radius={[6, 6, 0, 0]}>
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getAqiColor(entry.aqi)} />
                 ))}
