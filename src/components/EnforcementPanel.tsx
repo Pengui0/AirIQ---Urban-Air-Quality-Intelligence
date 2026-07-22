@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EnforcementNotice, CitySummary } from '../types';
-import { Shield, FileText, AlertOctagon, CheckCircle2, Download, ExternalLink, PlusCircle, Scale, Clock, MapPin, Printer } from 'lucide-react';
+import { Shield, FileText, AlertOctagon, CheckCircle2, Download, ExternalLink, PlusCircle, Scale, Clock, MapPin, Printer,Satellite } from 'lucide-react';
 
 interface EnforcementPanelProps {
   city: CitySummary;
@@ -40,7 +40,7 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
   };
 
   return (
-    <div className="glass-surface rounded-2xl p-6 space-y-6">
+    <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -53,7 +53,7 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Station-backed regulatory notice generator for {city.name}. Drafted under Air Act 1981 & GRAP directives.
+            Geospatial & Satellite Evidence RAG notice auto-generator for {city.name}. Drafted under Air Act 1981 & GRAP directives.
           </p>
         </div>
 
@@ -166,14 +166,15 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
                     <ExternalLink className="w-3.5 h-3.5 text-purple-400" />
                     <span>Attached Satellite & Drone Evidence Photo:</span>
                   </span>
-                  <div className="h-36 rounded-lg overflow-hidden border border-slate-800 relative group">
-                    <img
-                      src={selectedNotice.satelliteProofUrl}
-                      alt="Satellite evidence"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                  <div className="h-36 rounded-lg overflow-hidden border border-slate-800 relative group bg-gradient-to-br from-slate-800 via-purple-950/40 to-slate-900">
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(168,85,247,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.15)_1px,transparent_1px)] bg-[size:14px_14px]" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+                      <Satellite className="w-7 h-7 text-purple-400 mb-1.5" />
+                      <p className="text-[11px] text-purple-200 font-semibold">Simulated Sentinel-5P Capture</p>
+                      <p className="text-[9px] text-slate-400 mt-0.5">Illustrative plume rendering — not a live satellite photo</p>
+                    </div>
                     <div className="absolute bottom-2 left-2 bg-slate-900/90 text-white text-[10px] px-2 py-0.5 rounded font-mono border border-slate-700">
-                      GPS: {selectedNotice.lat}, {selectedNotice.lng} • Sentinel-5P Plume Verified
+                      GPS: {selectedNotice.lat}, {selectedNotice.lng} • Sentinel-5P Plume (Simulated)
                     </div>
                   </div>
                 </div>
@@ -323,7 +324,7 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
 
               <div className="pt-8 flex justify-between items-end">
                 <div className="text-[10px] text-slate-500">
-                  <p>Electronically generated from station and enforcement records</p>
+                  <p>Electronically generated with Sentinel-5P Satellite Verification</p>
                   <p>AirIQ Urban Intelligence Platform 2026</p>
                 </div>
                 <div className="text-center border-t border-slate-900 pt-1 w-40">

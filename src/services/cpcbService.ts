@@ -33,7 +33,8 @@ export async function fetchLiveCpcbData(): Promise<CpcbApiResponse> {
   });
 
   const apiKey = process.env.CPCB_API_KEY;
-  const resourceId = '3b4a4f57-a43f-4a7e-84cd-02135b1f6710';
+  const resourceId = '3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69';
+  console.log('[CPCB Debug] key length:', apiKey?.length, '| preview:', JSON.stringify(apiKey?.slice(0, 6) + '...' + apiKey?.slice(-4)));
 
   if (!apiKey) {
     throw new Error('CPCB_API_KEY not set in environment');
@@ -43,19 +44,21 @@ export async function fetchLiveCpcbData(): Promise<CpcbApiResponse> {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
     const res = await fetch(url, { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      throw new Error(`data.gov.in CPCB API returned HTTP ${res.status}: ${res.statusText}`);
+      const body = await res.text().catch(() => '');
+      throw new Error(`data.gov.in CPCB API returned HTTP ${res.status}: ${res.statusText} — ${body.slice(0, 300)}`);
     }
 
     const data = await res.json();
     const records: CpcbRecord[] = data?.records || [];
 
     if (!records || records.length === 0) {
+      console.error('[CPCB Raw Response]', JSON.stringify(data).slice(0, 1000));
       throw new Error('CPCB API response contained no records');
     }
 
