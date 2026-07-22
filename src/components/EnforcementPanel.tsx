@@ -53,7 +53,7 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Geospatial & Satellite Evidence RAG notice auto-generator for {city.name}. Drafted under Air Act 1981 & GRAP directives.
+            Station-backed regulatory notice generator for {city.name}. Drafted under Air Act 1981 & GRAP directives.
           </p>
         </div>
 
@@ -323,7 +323,7 @@ export const EnforcementPanel: React.FC<EnforcementPanelProps> = ({
 
               <div className="pt-8 flex justify-between items-end">
                 <div className="text-[10px] text-slate-500">
-                  <p>Electronically generated with Sentinel-5P Satellite Verification</p>
+                  <p>Electronically generated from station and enforcement records</p>
                   <p>AirIQ Urban Intelligence Platform 2026</p>
                 </div>
                 <div className="text-center border-t border-slate-900 pt-1 w-40">

@@ -1,4 +1,4 @@
-import { CitySummary, StationData, IndianLanguage, SatelliteHotspot, EnforcementNotice } from '../types';
+import { CitySummary, StationData, IndianLanguage, EnforcementNotice } from '../types';
 
 export const INDIAN_LANGUAGES: IndianLanguage[] = [
   { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
@@ -469,52 +469,5 @@ export const INITIAL_NOTICES: EnforcementNotice[] = [
     legalText: 'Excessive SO2 and opacity emissions recorded on Sentinel-5P satellite thermal scan and ground stack sensor. Scrubber bypassed during night shift.',
     status: 'SERVED',
     assignedOfficer: 'Officer P. Verma (North Zone)'
-  }
-];
-
-export const SATELLITE_HOTSPOTS: SatelliteHotspot[] = [
-  {
-    id: 'SAT-DEL-01',
-    lat: 28.6510,
-    lng: 77.3210,
-    locationName: 'Anand Vihar Transit Hub',
-    city: 'Delhi NCR',
-    no2ColumnDensity: 18.5,
-    intensity: 'EXTREME',
-    sourceType: 'Traffic Corridor',
-    copernicusPassTime: '2026-07-22 13:30 IST (Sentinel-5P Orbit #42109)'
-  },
-  {
-    id: 'SAT-DEL-02',
-    lat: 28.7020,
-    lng: 77.1680,
-    locationName: 'Wazirpur Metal Cluster',
-    city: 'Delhi NCR',
-    no2ColumnDensity: 22.1,
-    intensity: 'EXTREME',
-    sourceType: 'Industrial Cluster',
-    copernicusPassTime: '2026-07-22 13:30 IST (Sentinel-5P Orbit #42109)'
-  },
-  {
-    id: 'SAT-BOM-01',
-    lat: 19.0690,
-    lng: 72.8710,
-    locationName: 'BKC Flyover Infrastructure Project',
-    city: 'Mumbai',
-    no2ColumnDensity: 11.2,
-    intensity: 'HIGH',
-    sourceType: 'Traffic Corridor',
-    copernicusPassTime: '2026-07-22 13:30 IST (Sentinel-5P Orbit #42109)'
-  },
-  {
-    id: 'SAT-PUN-01',
-    lat: 29.8000,
-    lng: 75.5000,
-    locationName: 'Malwa Agriculture Belt',
-    city: 'Patiala / Sangrur',
-    no2ColumnDensity: 14.8,
-    intensity: 'HIGH',
-    sourceType: 'Agricultural Burning',
-    copernicusPassTime: '2026-07-22 13:30 IST (Sentinel-5P Orbit #42109)'
   }
 ];

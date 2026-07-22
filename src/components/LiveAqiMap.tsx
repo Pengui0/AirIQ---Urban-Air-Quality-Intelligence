@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { AQICategory, CitySummary, SatelliteHotspot, StationData } from '../types';
-import { AlertTriangle, ArrowDownRight, ArrowUpRight, ChevronRight, CloudSun, MapPin, Radio, Satellite, Wind } from 'lucide-react';
+import { AQICategory, CitySummary, StationData } from '../types';
+import { Activity, AlertTriangle, ArrowDownRight, ArrowUpRight, ChevronRight, CloudSun, MapPin, Radio, Wind } from 'lucide-react';
 
 interface LiveAqiMapProps {
   stations: StationData[];
   cities: CitySummary[];
-  satHotspots: SatelliteHotspot[];
   selectedCity: string;
   onSelectStation: (station: StationData) => void;
   selectedStation: StationData | null;
@@ -21,7 +20,7 @@ const categoryStyle: Record<AQICategory, { label: string; accent: string; surfac
   'Severe Plus': { label: 'Severe+', accent: 'text-red-300', surface: 'bg-red-500' },
 };
 
-export const LiveAqiMap: React.FC<LiveAqiMapProps> = ({ stations, cities, satHotspots, selectedCity, onSelectStation, selectedStation }) => {
+export const LiveAqiMap: React.FC<LiveAqiMapProps> = ({ stations, cities, selectedCity, onSelectStation, selectedStation }) => {
   const [stationView, setStationView] = useState<'all' | 'risk'>('all');
   const city = cities.find((item) => item.name === selectedCity) ?? cities[0];
   const cityStations = useMemo(() => {
@@ -33,7 +32,8 @@ export const LiveAqiMap: React.FC<LiveAqiMapProps> = ({ stations, cities, satHot
   const trendUp = city.trend === 'worsening';
   const aqi = categoryStyle[city.category];
   const highestStation = [...cityStations].sort((a, b) => b.aqi - a.aqi)[0];
-  const hotspotCount = satHotspots.filter((hotspot) => hotspot.city === city.name || hotspot.intensity === 'EXTREME').length;
+  const reportingStationCount = cityStations.filter((station) => !station.isStale).length;
+  const reportingCoverage = cityStations.length ? Math.round((reportingStationCount / cityStations.length) * 100) : 0;
 
   return (
     <section className="glass-surface overflow-hidden rounded-3xl">
@@ -86,16 +86,27 @@ export const LiveAqiMap: React.FC<LiveAqiMapProps> = ({ stations, cities, satHot
           <div className="mt-7 grid grid-cols-3 divide-x divide-slate-800">
             {[['24h', city.forecast24h], ['48h', city.forecast48h], ['72h', city.forecast72h]].map(([label, value]) => <div key={String(label)} className="px-3 first:pl-0 last:pr-0"><p className="text-xs text-slate-500">{label}</p><p className="mt-1 text-2xl font-semibold text-white">{value}</p><p className="mt-1 text-[11px] text-slate-500">AQI forecast</p></div>)}
           </div>
-          <div className="mt-8 flex items-center justify-between rounded-xl bg-slate-900 px-4 py-3"><div className="flex items-center gap-2 text-sm text-slate-300"><Wind className="h-4 w-4 text-cyan-300" /> Conditions monitored</div><ChevronRight className="h-4 w-4 text-slate-500" /></div>
+          <button
+            type="button"
+            onClick={() => document.getElementById('monitoring-stations')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="mt-8 flex w-full items-center justify-between rounded-xl bg-slate-900 px-4 py-3 text-left transition hover:bg-slate-800 focus:outline-none"
+            aria-label="View monitored station conditions"
+          >
+            <span className="flex items-center gap-2 text-sm text-slate-300"><Wind className="h-4 w-4 text-cyan-300" /> Conditions monitored</span>
+            <ChevronRight className="h-4 w-4 text-slate-500" />
+          </button>
         </article>
 
         <article className="rounded-2xl border border-slate-800 bg-slate-950/50 p-5 lg:col-span-3">
-          <Satellite className="h-5 w-5 text-violet-300" /><p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Satellite watch</p><p className="mt-2 text-3xl font-semibold text-white">{hotspotCount}</p><p className="mt-1 text-sm leading-5 text-slate-400">{hotspotCount ? 'verified plume signals requiring review' : 'No verified scene connected'}</p>
-          <div className="mt-6 border-t border-slate-800 pt-4 text-xs font-medium text-violet-300">Connect a traceable Copernicus scene to enable evidence</div>
+          <Activity className="h-5 w-5 text-emerald-300" />
+          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Monitoring network</p>
+          <p className="mt-2 text-3xl font-semibold text-white">{reportingCoverage}%</p>
+          <p className="mt-1 text-sm leading-5 text-slate-400">{reportingStationCount} of {cityStations.length} station readings are current</p>
+          <div className="mt-6 border-t border-slate-800 pt-4 text-xs font-medium text-emerald-300">{highestStation ? `Highest reading: ${highestStation.name} · AQI ${highestStation.aqi}` : 'Waiting for station readings'}</div>
         </article>
       </div>
 
-      <div className="border-t border-slate-800 bg-slate-950/30 p-5 lg:p-6">
+      <div id="monitoring-stations" className="scroll-mt-28 border-t border-slate-800 bg-slate-950/30 p-5 lg:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h3 className="text-base font-semibold text-white">Monitoring stations</h3><p className="mt-1 text-xs text-slate-500">Select a station to inspect its pollutant readings.</p></div><div className="flex rounded-lg border border-slate-800 bg-slate-900 p-1 text-xs"><button onClick={() => setStationView('all')} className={`rounded-md px-3 py-1.5 ${stationView === 'all' ? 'bg-slate-700 text-white' : 'text-slate-400'}`}>All stations</button><button onClick={() => setStationView('risk')} className={`rounded-md px-3 py-1.5 ${stationView === 'risk' ? 'bg-orange-500 text-white' : 'text-slate-400'}`}>Risk only</button></div></div>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {cityStations.slice(0, 6).map((station) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, UserRole, CitySummary, StationData, EnforcementNotice, SatelliteHotspot, SourceAttribution, ForecastPoint } from './types';
+import { User, UserRole, CitySummary, StationData, EnforcementNotice, SourceAttribution, ForecastPoint } from './types';
 import { INITIAL_CITIES, INITIAL_STATIONS, INITIAL_NOTICES } from './data/indiaCitiesData';
 import { Header } from './components/Header';
 import { LiveAqiMap } from './components/LiveAqiMap';
@@ -11,7 +11,6 @@ import { PolicySimulator } from './components/PolicySimulator';
 import { CitizenAdvisoryPanel } from './components/CitizenAdvisoryPanel';
 import { WhatsAppBotSimulator } from './components/WhatsAppBotSimulator';
 import { HealthCostPanel } from './components/HealthCostPanel';
-import { SatelliteOverlayPanel } from './components/SatelliteOverlayPanel';
 import { AccuracyTrackerPanel } from './components/AccuracyTrackerPanel';
 import { HealthCorrelationPanel } from './components/HealthCorrelationPanel';
 import { SystemMetricsModal } from './components/SystemMetricsModal';
@@ -218,7 +217,7 @@ export default function App() {
   }, [selectedCity, stations]);
 
   const NAV_ITEMS = [
-    { id: 'MAP', label: 'Live AQI & Satellite Map', icon: Map, color: 'emerald' },
+    { id: 'MAP', label: 'Live AQI & Monitoring', icon: Map, color: 'emerald' },
     { id: 'FORECAST', label: '72h Forecast & School Alerts', icon: TrendingUp, color: 'amber' },
     { id: 'ATTRIBUTION', label: 'Source Attribution', icon: Cpu, color: 'purple' },
     { id: 'ENFORCEMENT', label: 'CPCB Enforcement Center', icon: Shield, color: 'red' },
@@ -270,7 +269,7 @@ export default function App() {
             }`}
           >
             <Map className="w-4 h-4" />
-            <span>Live AQI & Satellite Map</span>
+            <span>Live AQI & Monitoring</span>
           </button>
 
           <button
@@ -369,7 +368,6 @@ export default function App() {
             <LiveAqiMap
               stations={stations}
               cities={cities}
-              satHotspots={[]}
               selectedCity={selectedCity}
               onSelectStation={(st) => setSelectedStation(st)}
               selectedStation={selectedStation}
@@ -452,7 +450,6 @@ export default function App() {
               <AccuracyTrackerPanel />
               <HealthCorrelationPanel />
             </div>
-            <SatelliteOverlayPanel />
           </div>
         )}
 

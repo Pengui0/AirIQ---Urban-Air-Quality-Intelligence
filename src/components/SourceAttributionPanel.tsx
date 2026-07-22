@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SourceAttribution, CitySummary } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { Cpu, Satellite, Sparkles, CheckCircle2, RefreshCw, Info, AlertCircle } from 'lucide-react';
+import { Cpu, Sparkles, CheckCircle2, RefreshCw, Info, AlertCircle } from 'lucide-react';
 
 interface SourceAttributionPanelProps {
   city: CitySummary;
@@ -23,7 +23,7 @@ export const SourceAttributionPanel: React.FC<SourceAttributionPanelProps> = ({
       <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl flex flex-col items-center justify-center text-center">
         <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-3" />
         <p className="text-slate-300 font-semibold">Running source apportionment analysis...</p>
-        <p className="text-xs text-slate-500 mt-1">Analyzing traffic density, satellite NO2 plumes, and thermal stacks</p>
+        <p className="text-xs text-slate-500 mt-1">Analyzing traffic density, industrial activity, and local station readings</p>
       </div>
     );
   }
@@ -135,8 +135,8 @@ export const SourceAttributionPanel: React.FC<SourceAttributionPanelProps> = ({
 
       </div>
 
-      {/* Spatial Vector Badges & Satellite Evidence */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+      {/* Spatial Vector Badges */}
+      <div className="pt-2">
         
         {/* Spatial Vectors */}
         <div className="bg-slate-800/40 border border-slate-700/60 p-3.5 rounded-xl space-y-2">
@@ -150,18 +150,6 @@ export const SourceAttributionPanel: React.FC<SourceAttributionPanelProps> = ({
             ))}
           </div>
         </div>
-
-        {/* Satellite NO2 Proof Note */}
-        <div className="bg-purple-950/30 border border-purple-500/30 p-3.5 rounded-xl space-y-1 text-xs">
-          <span className="text-purple-300 font-semibold flex items-center space-x-1.5">
-            <Satellite className="w-4 h-4 text-purple-400" />
-            <span>Sentinel-5P Satellite Verification:</span>
-          </span>
-          <p className="text-purple-200/90 text-[11px] mt-1">
-            {attribution.satelliteEvidenceNote}
-          </p>
-        </div>
-
       </div>
 
     </div>

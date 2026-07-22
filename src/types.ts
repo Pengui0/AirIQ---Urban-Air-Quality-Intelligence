@@ -83,7 +83,6 @@ export interface SourceAttribution {
   confidenceScore: number; // e.g. 0.92
   reasoningSummary: string;
   spatialFactors: string[];
-  satelliteEvidenceNote: string;
 }
 
 export interface EnforcementNotice {
@@ -159,18 +158,6 @@ export interface WhatsAppMessage {
   mediaUrl?: string;
   buttons?: string[];
   status?: 'sent' | 'delivered' | 'read';
-}
-
-export interface SatelliteHotspot {
-  id: string;
-  lat: number;
-  lng: number;
-  locationName: string;
-  city: string;
-  no2ColumnDensity: number; // 10^15 molec/cm^2
-  intensity: 'HIGH' | 'EXTREME' | 'MODERATE';
-  sourceType: 'Industrial Cluster' | 'Thermal Power Plant' | 'Traffic Corridor' | 'Agricultural Burning';
-  copernicusPassTime: string;
 }
 
 export interface AccuracyMetric {

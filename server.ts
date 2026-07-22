@@ -100,7 +100,6 @@ app.post('/api/attribution', (req, res) => {
       confidenceScore: 0.94,
       reasoningSummary: 'Heavy diesel transit on Ring Road combined with Anand Vihar construction activity and North-Western stubble plume inflow.',
       spatialFactors: ['Anand Vihar ISBT Traffic Density', 'Wazirpur Industrial Stack SO2 Plume', 'Panipat-Sonipat Stubble Vector'],
-      satelliteEvidenceNote: 'Sentinel-5P NO2 column density 22.1 x10^15 molec/cm^2 recorded over Delhi-Ghaziabad border.',
     };
   } else if (cityName.includes('Mumbai')) {
     result = {
@@ -112,7 +111,6 @@ app.post('/api/attribution', (req, res) => {
       confidenceScore: 0.91,
       reasoningSummary: 'Coastal humidity trapped dust from coastal road construction and heavy sea-port diesel truck traffic in BKC and Worli.',
       spatialFactors: ['BKC Infrastructure Project Dust', 'JNP Port Truck Corridor', 'Trombay Refineries Emission'],
-      satelliteEvidenceNote: 'High aerosol optical depth recorded over Western Express Highway.',
     };
   } else {
     result = {
@@ -124,7 +122,6 @@ app.post('/api/attribution', (req, res) => {
       confidenceScore: 0.89,
       reasoningSummary: 'Mixed urban emissions from traffic congestion and light industrial diesel generators during morning peak hours.',
       spatialFactors: ['Central Transit Corridor', 'Industrial Suburb Stacks', 'Urban Construction Dust'],
-      satelliteEvidenceNote: 'Moderate NO2 concentration detected along major highway ring roads.',
     };
   }
 
@@ -323,15 +320,7 @@ app.get('/api/cost-calculator', (req, res) => {
   });
 });
 
-// 10. Satellite & Accuracy endpoints
-app.get('/api/satellite', (req, res) => {
-  const browseUrl = process.env.COPERNICUS_BROWSE_URL;
-  if (!browseUrl) {
-    return res.status(503).json({ available: false, message: 'Configure COPERNICUS_BROWSE_URL with a traceable Copernicus Browser or catalogue scene URL to enable satellite evidence.' });
-  }
-  res.json({ available: true, source: 'Copernicus scene URL supplied by the deployment', browseUrl, updatedAt: new Date().toISOString() });
-});
-
+// 10. Accuracy endpoint
 app.get('/api/accuracy', (req, res) => {
   const source = process.env.FORECAST_VALIDATION_SOURCE;
   if (!source) return res.status(503).json({ available: false, message: 'Configure FORECAST_VALIDATION_SOURCE after storing actual forecast/observation pairs. No synthetic accuracy score is displayed.' });
