@@ -1,0 +1,5 @@
+{
+  "name": "AirIQ - Urban Air Quality Intelligence",
+  "description": "Production-grade Urban Air Quality Intelligence platform with live CPCB AQI map, 72-hour forecasting, source attribution, RAG enforcement notices, multi-city policy simulator, citizen advisories (12 languages), WhatsApp simulation bot, satellite NO2 overlay, and health cost calculator.",
+  "requestFramePermissions": []
+}
