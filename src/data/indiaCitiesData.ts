@@ -1,4 +1,4 @@
-import { CitySummary, StationData, IndianLanguage, SatelliteHotspot, AccuracyMetric, HealthCorrelationPoint, EnforcementNotice } from '../types';
+import { CitySummary, StationData, IndianLanguage, SatelliteHotspot, EnforcementNotice } from '../types';
 
 export const INDIAN_LANGUAGES: IndianLanguage[] = [
   { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
@@ -448,7 +448,6 @@ export const INITIAL_NOTICES: EnforcementNotice[] = [
     penaltyAmountRupees: 500000,
     fineDeadlineDays: 3,
     legalText: 'Notice under Section 31A: Uncovered demolition debris, lack of anti-smog guns, and dry cutting of tiles causing PM2.5 spike above 300 ug/m3 in Anand Vihar hotspot. Immediate stoppage of work ordered.',
-    satelliteProofUrl: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=600&auto=format&fit=crop&q=80',
     status: 'ISSUED',
     assignedOfficer: 'Officer R. K. Sharma (East Delhi Zone)'
   },
@@ -468,7 +467,6 @@ export const INITIAL_NOTICES: EnforcementNotice[] = [
     penaltyAmountRupees: 250000,
     fineDeadlineDays: 7,
     legalText: 'Excessive SO2 and opacity emissions recorded on Sentinel-5P satellite thermal scan and ground stack sensor. Scrubber bypassed during night shift.',
-    satelliteProofUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80',
     status: 'SERVED',
     assignedOfficer: 'Officer P. Verma (North Zone)'
   }
@@ -519,22 +517,4 @@ export const SATELLITE_HOTSPOTS: SatelliteHotspot[] = [
     sourceType: 'Agricultural Burning',
     copernicusPassTime: '2026-07-22 13:30 IST (Sentinel-5P Orbit #42109)'
   }
-];
-
-export const HISTORICAL_CORRELATION: HealthCorrelationPoint[] = [
-  { month: 'Jan 2026', aqi: 285, respiratoryAdmissions: 4210, asthmaErVisits: 1820, cardiovascularAlerts: 940, economicCostCrores: 2450 },
-  { month: 'Feb 2026', aqi: 242, respiratoryAdmissions: 3680, asthmaErVisits: 1510, cardiovascularAlerts: 810, economicCostCrores: 2110 },
-  { month: 'Mar 2026', aqi: 195, respiratoryAdmissions: 2890, asthmaErVisits: 1180, cardiovascularAlerts: 620, economicCostCrores: 1680 },
-  { month: 'Apr 2026', aqi: 168, respiratoryAdmissions: 2310, asthmaErVisits: 920, cardiovascularAlerts: 490, economicCostCrores: 1390 },
-  { month: 'May 2026', aqi: 152, respiratoryAdmissions: 1980, asthmaErVisits: 810, cardiovascularAlerts: 420, economicCostCrores: 1210 },
-  { month: 'Jun 2026', aqi: 118, respiratoryAdmissions: 1420, asthmaErVisits: 610, cardiovascularAlerts: 310, economicCostCrores: 880 },
-  { month: 'Jul 2026', aqi: 94,  respiratoryAdmissions: 1150, asthmaErVisits: 490, cardiovascularAlerts: 240, economicCostCrores: 720 },
-];
-
-export const ACCURACY_METRICS: AccuracyMetric[] = [
-  { city: 'Delhi NCR', date: '2026-07-21', forecastAqi: 240, actualAqi: 248, mae: 8, rmse: 10.2, accuracyPct: 96.7 },
-  { city: 'Mumbai', date: '2026-07-21', forecastAqi: 152, actualAqi: 158, mae: 6, rmse: 7.8, accuracyPct: 96.1 },
-  { city: 'Kolkata', date: '2026-07-21', forecastAqi: 185, actualAqi: 182, mae: 3, rmse: 4.5, accuracyPct: 98.3 },
-  { city: 'Bengaluru', date: '2026-07-21', forecastAqi: 85, actualAqi: 88, mae: 3, rmse: 3.9, accuracyPct: 96.5 },
-  { city: 'Chennai', date: '2026-07-21', forecastAqi: 72, actualAqi: 74, mae: 2, rmse: 2.8, accuracyPct: 97.3 },
 ];

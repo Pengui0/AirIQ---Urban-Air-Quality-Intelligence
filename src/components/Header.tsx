@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { User, UserRole, CitySummary } from '../types';
-import { Shield, Activity, Users, FileText, Cpu, AlertTriangle, RefreshCw, BarChart2 } from 'lucide-react';
+import { Shield, Users, Cpu, RefreshCw, BarChart2, MapPin, ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
   currentUser: User;
   onSwitchRole: (role: UserRole) => void;
   selectedCity: string;
+  selectedState: string;
+  onSelectState: (state: string) => void;
   onSelectCity: (city: string) => void;
   cities: CitySummary[];
   lastRefreshed: string;
@@ -19,6 +21,8 @@ export const Header: React.FC<HeaderProps> = ({
   currentUser,
   onSwitchRole,
   selectedCity,
+  selectedState,
+  onSelectState,
   onSelectCity,
   cities,
   lastRefreshed,
@@ -27,8 +31,10 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenMetrics,
   isDataStale,
 }) => {
+  const states = [...new Set(cities.map((city) => city.state))];
+  const citiesInState = cities.filter((city) => city.state === selectedState);
   return (
-    <header className="bg-slate-900 border-b border-slate-800 text-slate-100 sticky top-0 z-40 shadow-xl">
+    <header className="glass-header text-slate-100 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand & Live Indicator */}
@@ -61,14 +67,19 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* City Selector */}
-        <div className="hidden md:flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 rounded-lg px-3 py-1.5">
-          <span className="text-xs text-slate-400 font-medium">Focus Region:</span>
+        <div className="hidden lg:flex items-center gap-2 glass-control rounded-xl px-3 py-1.5">
+          <MapPin className="h-3.5 w-3.5 text-cyan-300" />
+          <span className="text-xs text-slate-400 font-medium">Focus region</span>
+          <select value={selectedState} onChange={(e) => onSelectState(e.target.value)} className="bg-transparent text-sm font-semibold text-slate-100 focus:outline-none cursor-pointer">
+            {states.map((state) => <option key={state} value={state} className="bg-slate-900 text-slate-200">{state}</option>)}
+          </select>
+          <ChevronDown className="h-3.5 w-3.5 text-slate-500" />
           <select
             value={selectedCity}
             onChange={(e) => onSelectCity(e.target.value)}
             className="bg-transparent text-sm font-semibold text-emerald-300 focus:outline-none cursor-pointer"
           >
-            {cities.map((c) => (
+            {citiesInState.map((c) => (
               <option key={c.name} value={c.name} className="bg-slate-900 text-slate-200">
                 {c.name} (AQI {c.avgAqi})
               </option>

@@ -1,72 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { HealthCorrelationPoint } from '../types';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { Activity, Stethoscope, AlertTriangle, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Activity, DatabaseZap } from 'lucide-react';
+
+type HealthFeed = { available: boolean; message?: string; source?: string; updatedAt?: string };
 
 export const HealthCorrelationPanel: React.FC = () => {
-  const [data, setData] = useState<HealthCorrelationPoint[]>([]);
+  const [feed, setFeed] = useState<HealthFeed | null>(null);
 
   useEffect(() => {
-    fetch('/api/health-correlation')
-      .then((res) => res.json())
-      .then((resData) => {
-        if (resData && resData.dataset) {
-          setData(resData.dataset);
-        }
-      })
-      .catch(() => {});
+    fetch('/api/health-correlation').then((res) => res.json()).then(setFeed).catch(() => setFeed({ available: false, message: 'The health data service could not be reached.' }));
   }, []);
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
-      
-      {/* Header */}
+    <div className="glass-surface rounded-2xl p-6 space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2">
-            <h2 className="text-xl font-bold text-white tracking-tight">AQI vs Respiratory Hospital Admissions Correlation</h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-950 border border-rose-500/40 text-rose-300 font-bold flex items-center space-x-1">
-              <Activity className="w-3.5 h-3.5 inline" />
-              <span>Pearson Correlation r = 0.94</span>
-            </span>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">
-            48-hour lagged correlation between CAAQMS PM2.5 spikes and public hospital ER respiratory & asthma admissions.
-          </p>
+          <div className="flex items-center gap-2"><h2 className="text-xl font-bold text-white tracking-tight">AQI & Respiratory Admissions</h2><span className="rounded-full border border-slate-600 bg-slate-800/60 px-2.5 py-0.5 text-xs font-bold text-slate-300">Verified feed only</span></div>
+          <p className="mt-1 text-xs text-slate-400">Correlation is rendered only from an authorised hospital or public-health dataset. AirIQ does not estimate admissions.</p>
         </div>
       </div>
-
-      {/* Line Chart */}
-      <div className="h-64 w-full pt-2 bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
-            <XAxis dataKey="month" stroke="#94a3b8" fontSize={10} tickLine={false} />
-            <YAxis yAxisId="left" stroke="#f97316" fontSize={10} tickLine={false} />
-            <YAxis yAxisId="right" orientation="right" stroke="#ef4444" fontSize={10} tickLine={false} />
-            <Tooltip
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const item: HealthCorrelationPoint = payload[0].payload;
-                  return (
-                    <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg text-xs space-y-1">
-                      <p className="font-bold text-white">{item.month}</p>
-                      <p className="text-orange-400">Monthly Avg AQI: <strong>{item.aqi}</strong></p>
-                      <p className="text-rose-400">Respiratory ER Admissions: <strong>{item.respiratoryAdmissions}</strong></p>
-                      <p className="text-amber-300">Asthma Emergency Cases: <strong>{item.asthmaErVisits}</strong></p>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-            <Line yAxisId="left" type="monotone" dataKey="aqi" stroke="#f97316" strokeWidth={2.5} name="Monthly Avg AQI" />
-            <Line yAxisId="right" type="monotone" dataKey="respiratoryAdmissions" stroke="#ef4444" strokeWidth={2.5} name="Hospital Respiratory ER Admissions" />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="rounded-xl border border-dashed border-cyan-300/25 bg-cyan-400/5 p-5 text-sm text-slate-300">
+        <DatabaseZap className="mb-3 h-5 w-5 text-cyan-300" />
+        <p className="font-semibold text-white">{feed?.available ? 'Verified health feed connected' : 'No verified hospital-admissions feed configured'}</p>
+        <p className="mt-1 text-xs leading-5 text-slate-400">{feed?.message || 'Checking data connection…'}</p>
+        {feed?.source && <p className="mt-3 text-xs text-cyan-200">Source: {feed.source}{feed.updatedAt ? ` · Updated ${new Date(feed.updatedAt).toLocaleString('en-IN')}` : ''}</p>}
       </div>
-
     </div>
   );
 };

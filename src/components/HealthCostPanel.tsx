@@ -41,7 +41,7 @@ export const HealthCostPanel: React.FC<HealthCostPanelProps> = ({ city }) => {
   const yearlyCrores = costData.yearlyEconomicBurdenCrores || (monthlyCrores * 12);
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
+    <div className="glass-surface rounded-2xl p-6 space-y-6">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">

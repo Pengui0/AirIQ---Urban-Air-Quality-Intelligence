@@ -31,7 +31,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
   };
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
+    <div className="glass-surface rounded-2xl p-6 space-y-6">
       
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -43,7 +43,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Side-by-side comparison across top Indian metro corridors. Track GRAP emergency triggers and monthly economic burden.
+            Side-by-side comparison across top Indian metro corridors. Select any card to open its city brief, with state context carried through every workspace.
           </p>
         </div>
       </div>
@@ -53,10 +53,10 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
         {cities.slice(0, 5).map((c) => {
           const isSelected = selectedCity.toLowerCase() === c.name.toLowerCase();
           return (
-            <div
+            <button
               key={c.name}
               onClick={() => onSelectCity(c.name)}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${
+              className={`glass-card w-full p-4 rounded-xl border cursor-pointer text-left transition-all ${
                 isSelected
                   ? 'bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/30 shadow-xl'
                   : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
@@ -72,6 +72,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
                   <Minus className="w-4 h-4 text-slate-500" />
                 )}
               </div>
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-cyan-200/70">{c.state}</p>
 
               <div className="flex items-baseline space-x-2">
                 <span className="text-2xl font-extrabold text-white" style={{ color: getAqiColor(c.avgAqi) }}>
@@ -101,7 +102,7 @@ export const MultiCityDashboard: React.FC<MultiCityDashboardProps> = ({
                   <span>GRAP Action Triggered</span>
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
       </div>

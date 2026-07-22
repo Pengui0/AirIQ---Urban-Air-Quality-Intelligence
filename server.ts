@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
-import { INITIAL_CITIES, INITIAL_STATIONS, INITIAL_NOTICES, SATELLITE_HOTSPOTS, ACCURACY_METRICS, HISTORICAL_CORRELATION } from './src/data/indiaCitiesData';
+import { INITIAL_CITIES, INITIAL_STATIONS, INITIAL_NOTICES } from './src/data/indiaCitiesData';
 import { generate72HourForecast } from './src/services/forecastingService';
 import { simulatePolicyImpact } from './src/services/policyService';
 import { fetchLiveCpcbData } from './src/services/cpcbService';
@@ -175,7 +175,6 @@ NOW THEREFORE, in exercise of powers conferred under Section 31A, you are hereby
     grapCategory: severity === 'CRITICAL' ? 'GRAP Stage IV' : 'GRAP Stage III',
     status: 'ISSUED',
     assignedOfficer: 'Officer Enforcement Cell',
-    satelliteProofUrl: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=600&auto=format&fit=crop&q=80',
     ...legalNotice,
   };
 
@@ -326,32 +325,25 @@ app.get('/api/cost-calculator', (req, res) => {
 
 // 10. Satellite & Accuracy endpoints
 app.get('/api/satellite', (req, res) => {
-  res.json({
-    success: true,
-    satellite: 'ESA Copernicus Sentinel-5P TROPOMI (Simulated Overlay)',
-    isSimulated: true,
-    sourceNote: 'Simulated satellite hotspots based on Copernicus atmospheric grid models',
-    passTime: '2026-07-22 13:30 IST',
-    spatialResolution: '1km x 1km',
-    hotspots: SATELLITE_HOTSPOTS,
-  });
+  const browseUrl = process.env.COPERNICUS_BROWSE_URL;
+  if (!browseUrl) {
+    return res.status(503).json({ available: false, message: 'Configure COPERNICUS_BROWSE_URL with a traceable Copernicus Browser or catalogue scene URL to enable satellite evidence.' });
+  }
+  res.json({ available: true, source: 'Copernicus scene URL supplied by the deployment', browseUrl, updatedAt: new Date().toISOString() });
 });
 
 app.get('/api/accuracy', (req, res) => {
-  res.json({
-    success: true,
-    accuracyMetrics: ACCURACY_METRICS,
-    systemWideAccuracy: 96.8,
-  });
+  const source = process.env.FORECAST_VALIDATION_SOURCE;
+  if (!source) return res.status(503).json({ available: false, message: 'Configure FORECAST_VALIDATION_SOURCE after storing actual forecast/observation pairs. No synthetic accuracy score is displayed.' });
+  res.json({ available: true, source, updatedAt: new Date().toISOString(), message: 'Verified forecast-validation feed registered.' });
 });
 
 app.get('/api/health-correlation', (req, res) => {
-  res.json({
-    success: true,
-    dataset: HISTORICAL_CORRELATION,
-    pearsonCorrelation: 0.94,
-    source: 'Public Hospital ER Respiratory Admissions vs CPCB CAAQMS Feed',
-  });
+  const source = process.env.HEALTH_DATA_SOURCE;
+  if (!source) {
+    return res.status(503).json({ available: false, message: 'Hospital admission records are not publicly available in this deployment. Configure HEALTH_DATA_SOURCE only after an authorised data-sharing agreement is in place.' });
+  }
+  res.json({ available: true, source, updatedAt: new Date().toISOString(), message: 'Authorised health feed registered. Aggregate, de-identified data should be validated before correlation is published.' });
 });
 
 // Vite Middleware Integration

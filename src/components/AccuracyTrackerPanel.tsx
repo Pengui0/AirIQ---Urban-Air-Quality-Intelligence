@@ -1,70 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { AccuracyMetric } from '../types';
-import { CheckCircle2, Award, ShieldCheck, BarChart3 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Award, DatabaseZap } from 'lucide-react';
+
+type ValidationFeed = { available: boolean; message?: string; source?: string; updatedAt?: string };
 
 export const AccuracyTrackerPanel: React.FC = () => {
-  const [metrics, setMetrics] = useState<AccuracyMetric[]>([]);
-  const [systemAccuracy, setSystemAccuracy] = useState<number>(96.8);
-
-  useEffect(() => {
-    fetch('/api/accuracy')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.accuracyMetrics) {
-          setMetrics(data.accuracyMetrics);
-          setSystemAccuracy(data.systemWideAccuracy || 96.8);
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const [feed, setFeed] = useState<ValidationFeed | null>(null);
+  useEffect(() => { fetch('/api/accuracy').then((res) => res.json()).then(setFeed).catch(() => setFeed({ available: false, message: 'The validation service could not be reached.' })); }, []);
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6">
-      
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-2">
-            <h2 className="text-xl font-bold text-white tracking-tight">Forecast Accuracy & Validation Tracker</h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-400 font-bold flex items-center space-x-1">
-              <Award className="w-3.5 h-3.5 inline" />
-              <span>{systemAccuracy}% System Verification Rate</span>
-            </span>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Historical 24h prediction vs CPCB ground truth. Tracks MAE (Mean Absolute Error) and RMSE across major metros.
-          </p>
-        </div>
+    <div className="glass-surface rounded-2xl p-6 space-y-5">
+      <div className="flex flex-wrap items-center gap-2"><h2 className="text-xl font-bold text-white tracking-tight">Forecast Validation</h2><span className="rounded-full border border-slate-600 bg-slate-800/60 px-2.5 py-0.5 text-xs font-bold text-slate-300">Observed data only</span></div>
+      <div className="rounded-xl border border-dashed border-emerald-300/25 bg-emerald-400/5 p-5 text-sm text-slate-300">
+        <Award className="mb-3 h-5 w-5 text-emerald-300" />
+        <p className="font-semibold text-white">{feed?.available ? 'Verified forecast validation connected' : 'No verified forecast-validation feed configured'}</p>
+        <p className="mt-1 text-xs leading-5 text-slate-400">{feed?.message || 'Checking data connection…'}</p>
+        {feed?.source && <p className="mt-3 text-xs text-emerald-200">Source: {feed.source}</p>}
       </div>
-
-      {/* Accuracy Table */}
-      <div className="bg-slate-950/80 border border-slate-800 rounded-xl overflow-hidden">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800">
-            <tr>
-              <th className="p-3">City Corridor</th>
-              <th className="p-3">Validation Date</th>
-              <th className="p-3">24h Forecast AQI</th>
-              <th className="p-3">Actual CPCB Ground AQI</th>
-              <th className="p-3">MAE Error</th>
-              <th className="p-3 text-right">Accuracy Score</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/80">
-            {metrics.map((m, idx) => (
-              <tr key={idx} className="hover:bg-slate-900/60 transition-colors">
-                <td className="p-3 font-bold text-white">{m.city}</td>
-                <td className="p-3 text-slate-400 font-mono">{m.date}</td>
-                <td className="p-3 text-amber-400 font-semibold">{m.forecastAqi}</td>
-                <td className="p-3 text-emerald-400 font-semibold">{m.actualAqi}</td>
-                <td className="p-3 text-slate-400 font-mono">±{m.mae} pts</td>
-                <td className="p-3 text-right font-extrabold text-cyan-400">{m.accuracyPct}%</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
     </div>
   );
 };
